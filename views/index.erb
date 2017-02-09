@@ -10,7 +10,7 @@
         var name = $("#username").val();
         var messatext = $("#messagetext").val();
         alert();
-      $.post("http://localhost:4567/comment",{"uname":name, "umessage":messatext});
+      $.post("/comment",{"uname":name, "umessage":messatext});
       });
     });
   </script>
