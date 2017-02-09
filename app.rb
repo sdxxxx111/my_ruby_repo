@@ -1,21 +1,33 @@
 require 'sequel'
 require 'sinatra'
 require 'sinatra/reloader'
+require 'time'
+require 'json'
 
 db_path = File.dirname(__FILE__) + "/dbtable.db"
 DB = Sequel.sqlite(db_path)
 
 get '/' do
- erb :index
+  @messages = DB[:messagetable].all
+  erb :index
 end
 
-post '/comment' do
-  if params[:uname]
-    u_name = params[:uname]
-  else
-    u_name = "ななし"
-  end
+post '/message' do
+  u_name = params[:uname]
   message = params[:umessage]
- puts "#{u_name}#{message}"
-  DB[:messagetable].insert(name: u_name, message: message)
+  DB[:messagetable].insert(name: u_name, message: message, messagedate: Time.now)
+end
+
+post '/messageshow' do
+    showmessage = DB[:messagetable].order(Sequel.desc(:messagedate)).first
+    data = {"id" => showmessage[:id], "name" => showmessage[:name], "message" => showmessage[:message], "messagedate" => showmessage[:messagedate]}
+    content_type :json
+    @data = data.to_json
+end
+
+post '/messagedel' do
+  id = params[:id]
+  id.each{|id_num|
+    DB[:messagetable].where(id: id_num).delete
+  }
 end

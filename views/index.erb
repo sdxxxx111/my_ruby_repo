@@ -9,18 +9,47 @@
       $("#messagebtn").click(function(){
         var name = $("#username").val();
         var messatext = $("#messagetext").val();
-        alert();
-      $.post('/comment',{"uname":name, "umessage":messatext});
+        $("#username").val("");
+        $("#messagetext").val("");
+        if(name.length > 0 && messatext.length > 0){
+          $.post('/message',{"uname":name, "umessage":messatext});
+          $.post('/messageshow',function(data){
+            $("#messageform").append("<tr><td><input type='checkbox' name='check[]' value="+data.id+">チェック</td><td>名前:"+data.name+"</td><td>メッセージ:"+data.message+"</td><td>日付:"+data.messagedate+"</td></tr>");
+          },"json");
+        }else{
+          alert("入力されていません");
+        }
       });
+      $("#delbtn").click(function(){
+        var id_array = [];
+        if($("[name='check[]']:checked").length){
+          $("[name='check[]']:checked").each(function(index){
+            id_array.push($(this).val());
+            $("#"+$(this).val()).empty();
+            $("#"+$(this).val()).remove();
+          });
+          $.post('/messagedel',{"id":id_array});
+        }
+      });
+
+
     });
   </script>
 </head>
 <body style="width:60%;margin:0 auto;text-align:center;">
   <h1>掲示板アプリです</h1>
-    <input type="text" id="username" placeholder="名無し" />
-    <textarea id="messagetext" /></textarea>
-    <input id="messagebtn" type="button" value="コメントする" />
-    <div id="comments">
-    </div>
+    <table id="messageform" style="width:100%;margin:0 auto;text-align:center;">
+    <tr><td>名前:<input type="text" id="username" placeholder="名前" /></td></tr>
+    <tr><td>メッセージ:<textarea id="messagetext"  rows="5"　placeholder="何かメッセージ"/></textarea></td></tr>
+    <tr><td><input id="messagebtn" type="button" value="コメントする" /></td><td><input id="delbtn" type="button" value="チェック削除"/></td></tr>
+      <% @messages.each do |message| %>
+      <tr id='<%=message[:id]%>'>
+       <td><input type="checkbox" name="check[]" value='<%=message[:id]%>'>チェック</td>
+       <td>名前:<%=message[:name]%></td>
+       <td>メッセージ:<%=message[:message]%></td>
+       <td>日付:<%=message[:messagedate]%></td>
+      </tr>
+      <% end %>
+    </table>
 </body>
 </html>
