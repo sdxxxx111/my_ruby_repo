@@ -1,5 +1,6 @@
 require 'sequel'
 require 'sinatra'
+require 'sinatra/reloader'
 
 db_path = File.dirname(__FILE__) + "dbtable.db"
 DB = Sequel.sqlite(db_path)
