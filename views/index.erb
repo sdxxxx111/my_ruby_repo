@@ -1,28 +1,26 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <title>掲示板アプリ</title>
-  <script type="text/javascript" src="../jquery-1.5.1.js"></script>
+  <script type="text/javascript" src="../jquery-3.1.1.min.js"></script>
   <script type="text/javascript">
     $(function(){
       $("#messagebtn").click(function(){
         var name = $("#username").val();
         var messatext = $("#messagetext").val();
-      $.post("/comment",
-      {"uname":name, "umessage", messatext},
-    function(data){});
-  });
+        alert();
+      $.post("http://localhost:4567/comment",{"uname":name, "umessage":messatext});
+      });
     });
   </script>
 </head>
 <body style="width:60%;margin:0 auto;text-align:center;">
-  <h1>掲示板アプリ</h1>
+  <h1>掲示板アプリです</h1>
     <input type="text" id="username" placeholder="名無し" />
     <textarea id="messagetext" /></textarea>
     <input id="messagebtn" type="button" value="コメントする" />
     <div id="comments">
     </div>
 </body>
-</html> -->
-<h1>hello</h1>
+</html>
