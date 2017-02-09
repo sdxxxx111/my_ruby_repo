@@ -1,13 +1,14 @@
 require 'sequel'
 require 'sinatra'
 
-db_path = File.dirname(__FILE__) + "/dbtable.db"
+db_path = File.dirname(__FILE__) + "dbtable.db"
 DB = Sequel.sqlite(db_path)
 
-
 get '/' do
-  'hello 2017'
+ erb :index
 end
+
+
 
 # post '/comment' do
 #   if params[:name]
